@@ -1,45 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
 #include <string.h>
+#include <malloc.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <time.h>
 
-int sh_cd(char** args) {
-  if (args[1] == NULL) {
-    printf("expected arguments, got none\n");
-  } else {
-    if (chdir(args[1]) != 0) {
-      perror("invalid directory\n");
-    }
-  }
-  return 1;
-}
-
-int sh_exit() {
-  return 0;
-} 
-char* builtin[] = {
-  "sh_cd",
-  "sh_exit",
-  "sh_echo"
-};
-
-int sh_echo(char** args) {
-  
-  return 1;
-}
-
-int (*builtinFunc[]) (char**) = {
-  &sh_cd,
-  &sh_exit,
-  &sh_echo
-};
-
-int NumBuiiltins() {
-  return sizeof(builtin) / sizeof(char*);
-}
+#include "../include/builtins.h"
 
 char* ReadLine() {
 
@@ -116,7 +83,7 @@ int Execute(char** args) {
     return 1;
   }
 
-  for (int i = 0; i < NumBuiiltins(); i++) {
+  for (int i = 0; i < NumBuiltins(); i++) {
     if (strcmp(args[0], builtin[i]) == 0) {
       return (*builtinFunc[i])(args);
     }
@@ -145,7 +112,7 @@ int Execute(char** args) {
   return 1;
 }
 
-void Loop() {
+void MainLoop() {
 
   char* line;
   char** args;
@@ -155,6 +122,7 @@ void Loop() {
   
     char pwd[1024];
     if (getcwd(pwd, sizeof(pwd)) != NULL) {
+      printf("%s ", getlogin());
       printf("%s\n", pwd);
     } 
 
@@ -168,9 +136,4 @@ void Loop() {
     free(args);
   
   } while(status);
-}
-
-int main() {
-  Loop();
-  return 0;
 }
