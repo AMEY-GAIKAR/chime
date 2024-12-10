@@ -120,13 +120,19 @@ void MainLoop() {
 
   do {
   
+    time_t t;
+    struct tm* timeinfo;
+    time(&t);
+    timeinfo = localtime(&t);
+
+    printf("\e[1;32m" "%s" "\e[0m", asctime(timeinfo));
+    printf("\e[1;32m" "%s " "\e[0m", getlogin());
     char pwd[1024];
     if (getcwd(pwd, sizeof(pwd)) != NULL) {
-      printf("%s ", getlogin());
       printf("%s\n", pwd);
     } 
 
-    printf("> ");
+    printf("\e[1;34m" "> " "\e[0m");
 
     line = ReadLine(); 
     args = SplitLine(line);
