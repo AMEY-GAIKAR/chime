@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
@@ -7,6 +6,9 @@
 #include <time.h>
 
 #include "../include/builtins.h"
+#include "../include/colours.h"
+
+#define TOKEN_SEP " \t\n\r"
 
 char* ReadLine() {
 
@@ -21,13 +23,16 @@ char* ReadLine() {
   }
 
   while (1) {
+
     c = getchar();
+
     if (c == EOF || c == '\n') {
       buffer[position] = '\0';
       return buffer;
     } else {
       buffer[position] = c;
     }
+    
     position++;
 
     if (position >= buffersize) {
@@ -39,6 +44,7 @@ char* ReadLine() {
       printf("Allocation error\n");
       exit(EXIT_FAILURE);
     }
+  
   }
 }
 
@@ -53,9 +59,10 @@ char** SplitLine(char* line) {
     printf("Allocation error\n");
   }
 
-  token = strtok(line, " ");
+  token = strtok(line, TOKEN_SEP);
 
   while (token != NULL) {
+
     tokens[position] = token;
     position++;
 
@@ -69,7 +76,7 @@ char** SplitLine(char* line) {
       }
     }
     
-    token = strtok(NULL, " ");
+    token = strtok(NULL, TOKEN_SEP);
   }
 
   tokens[position] = NULL;
@@ -100,7 +107,7 @@ int Execute(char** args) {
 
   if (cpid == 0) {
     if (execvp(args[0], args) < 0) {
-      printf("dash: command not found: %s\n", args[0]);
+      printf(RED "sh: command not found: %s\n" COLOR_RESET, args[0]);
     }
     exit(EXIT_FAILURE);
   } else if (cpid < 0) {
@@ -120,19 +127,13 @@ void MainLoop() {
 
   do {
   
-    time_t t;
-    struct tm* timeinfo;
-    time(&t);
-    timeinfo = localtime(&t);
-
-    printf("\e[1;32m" "%s" "\e[0m", asctime(timeinfo));
-    printf("\e[1;32m" "%s " "\e[0m", getlogin());
+    printf(BLU "%s " COLOR_RESET, getlogin());
     char pwd[1024];
     if (getcwd(pwd, sizeof(pwd)) != NULL) {
-      printf("%s\n", pwd);
+      printf(CYN "%s\n" COLOR_RESET, pwd);
     } 
 
-    printf("\e[1;34m" "> " "\e[0m");
+    printf(BMAG "> " COLOR_RESET);
 
     line = ReadLine(); 
     args = SplitLine(line);

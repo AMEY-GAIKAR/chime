@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include "../include/colours.h"
+
 int sh_cd(char** args) {
   
   if (args[1] == NULL) {
-    printf("expected argument, got none\n");
+    printf(RED "no argument passed\n" COLOR_RESET);
   } else {
     if (chdir(args[1]) != 0) {
-      perror("invalid directory\n");
+      perror(RED "" COLOR_RESET);
     }
   }
   
