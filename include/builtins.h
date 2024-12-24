@@ -7,6 +7,11 @@
 int sh_cd(char** args);
 int sh_echo(char** args);
 int sh_exit();
+int sh_time();
+
+int sh_getenv(char** args);
+int sh_setenv(char** args);
+int sh_unsetenv(char** args);
 
 extern char* builtin[];
 
