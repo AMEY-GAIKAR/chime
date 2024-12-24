@@ -3,10 +3,10 @@
 // TODO Color-code errors
 // TODO Format time
 // TODO Format Filepath
-// TODO Pipes
-// TODO Implement ; && ||
-// TODO Line continuation with "\"
+// TODO Pipes & Redirect
 // TODO History
+// TODO Job control
+// TODO Line continuation with "\"
 
 int main() {
   MainLoop();
