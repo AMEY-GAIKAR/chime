@@ -1,9 +1,14 @@
+#include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 #include <unistd.h>
 
 #include "../include/colours.h"
+
+#define SH_HISTORY "/home/amey/chime/.history"
+
+#define MAX_HISTORY 1024
 
 void GetTime() {
 
@@ -42,4 +47,35 @@ void UnsetEnvValue(const char* var) {
   } else {
     printf(RED "Could not unset %s.\n" COLOR_RESET, var);
   }
+}
+
+void AddToHistory(char *command) {
+
+  FILE* history = fopen(SH_HISTORY, "a"); 
+  
+  if (history == NULL) {
+    printf("No history file found.\n");
+    return;
+  }
+  
+  fprintf(history, "%s\n", command);
+  fclose(history);
+}
+
+void PrintHistory() {
+  
+  FILE* history = fopen(SH_HISTORY, "r");
+  
+  if (history == NULL) {
+    printf("No history file found.\n");
+    return;
+  }
+  
+  char buffer[MAX_HISTORY];
+  
+  while (fgets(buffer, MAX_HISTORY, history)) {
+    printf("%s", buffer);
+  }
+  
+  fclose(history);
 }

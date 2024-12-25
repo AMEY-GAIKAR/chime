@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "../include/colours.h"
 #include "../include/utils.h"
+#include "../include/colours.h"
 
 int sh_cd(char** args) {
   
@@ -75,6 +75,11 @@ int sh_unsetenv(char** args) {
   return 1;
 }
 
+int sh_history() {
+  PrintHistory();
+  return 1;
+}
+
 char* builtin[] = {
   "sh_cd",
   "sh_exit",
@@ -82,7 +87,8 @@ char* builtin[] = {
   "sh_time",
   "sh_getenv",
   "sh_setenv",
-  "sh_unsetenv"
+  "sh_unsetenv",
+  "sh_history"
 };
 
 int (*builtinFunc[]) (char**) = {
@@ -93,6 +99,7 @@ int (*builtinFunc[]) (char**) = {
   &sh_getenv,
   &sh_setenv,
   &sh_unsetenv,
+  &sh_history
 };
 
 int NumBuiltins() {

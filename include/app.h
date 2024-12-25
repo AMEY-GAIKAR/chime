@@ -8,7 +8,9 @@
 #include <sys/wait.h>
 #include <time.h>
 
-#include "builtins.h"
+#include "../include/utils.h"
+#include "../include/builtins.h"
+#include "../include/colours.h"
 
 char* ReadLine();
 char** SplitLine(char* line);

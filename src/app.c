@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 #include <time.h>
 
+#include "../include/utils.h"
 #include "../include/builtins.h"
 #include "../include/colours.h"
 
@@ -137,6 +138,9 @@ void MainLoop() {
 
     line = ReadLine(); 
     args = SplitLine(line);
+
+    AddToHistory(line);
+
     status = Execute(args);
     
     free(line);
