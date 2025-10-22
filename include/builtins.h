@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "../include/utils.h"
 #include "../include/colours.h"
+#include "../include/utils.h"
 
 int sh_cd(char** args);
 int sh_echo(char** args);

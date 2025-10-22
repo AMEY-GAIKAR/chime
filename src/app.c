@@ -1,15 +1,14 @@
-#include <fcntl.h>
+#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <malloc.h>
-#include <unistd.h>
 #include <sys/wait.h>
 #include <time.h>
+#include <unistd.h>
 
-#include "../include/utils.h"
 #include "../include/builtins.h"
 #include "../include/colours.h"
+#include "../include/utils.h"
 
 #define TOKEN_SEP " \t\n\r"
 
@@ -149,108 +148,4 @@ void MainLoop() {
     free(args);
   
   } while(status);
-}
-
-#define MAX_CMD_LENGHT 1024
-
-void ExecuteRedirection(char* cmd) {
-  
-  char* args[MAX_CMD_LENGHT];
-  char* input_file = NULL;
-  char* output_file = NULL;
-  int arg_count = 0;
-
-  char* token = strtok(cmd, TOKEN_SEP);
-  while (token != NULL) {
-    if (strcmp(token, "<") == 0) {
-      token = strtok(NULL, TOKEN_SEP);
-      input_file = token;
-    } else if (strcmp(token, ">") == 0) {
-      token = strtok(NULL, TOKEN_SEP);
-      output_file = token;
-    } else {
-      args[arg_count++] = token;
-    }
-    token = strtok(NULL, TOKEN_SEP);
-  }
-  args[arg_count] = NULL;
-
-  pid_t pid = fork();
-
-  if (pid == 0) {
-
-    if (input_file) {
-      int fd_in = open(input_file, O_RDONLY);
-      if (fd_in < 0) {
-        perror("Error opening input file");
-        exit(EXIT_FAILURE);
-      }
-      dup2(fd_in, STDIN_FILENO);
-      close(fd_in);
-    }
-
-    if (output_file) {
-      int fd_out = open(output_file, O_WRONLY | O_CREAT | O_TRUNC);
-      if (fd_out < 0) {
-        perror("Error opening output file");
-        exit(EXIT_FAILURE);
-      }
-      dup2(fd_out, STDOUT_FILENO);
-      close(fd_out);
-    }
-
-    execvp(args[0], args);
-    perror("Error executing command");
-    exit(EXIT_FAILURE);
-
-  } else if (pid > 0) {
-    wait(NULL);
-  } else {
-    perror("Fork failed");
-  }
-} 
-
-void ExecutePipeline(char* cmd1, char* cmd2) {
-
-  int pipefd[2];
-  pid_t pid1, pid2;
-
-  if (pipe(pipefd) == -1) {
-    perror("Pipe falied");
-    exit(EXIT_FAILURE);
-  }
-
-  pid1 = fork();
-  if (pid1 == -1) {
-    perror("Fork failed");
-    exit(EXIT_FAILURE);
-  } else if (pid1 == 0) {
-    close(pipefd[0]);
-    dup2(pipefd[1], STDOUT_FILENO);
-    close(pipefd[1]);
-
-    execvp(&cmd1[0], &cmd1);
-    perror("Invalid commnad");
-    exit(EXIT_FAILURE);
-  }
-
-  pid2 = fork();
-  if (pid2 == -1) {
-    perror("Fork failed");
-    exit(EXIT_FAILURE);
-  } else if (pid2 == 0) {
-    close(pipefd[1]);
-    dup2(pipefd[0], STDIN_FILENO);
-    close(pipefd[0]);
-
-    execvp(&cmd2[0], &cmd2);
-    perror("Invalid commnad");
-    exit(EXIT_FAILURE);
-  }
-
-  close(pipefd[0]);
-  close(pipefd[1]);
-  waitpid(pid1, NULL, 0);
-  waitpid(pid2, NULL, 0);
-
 }

@@ -1,12 +1,12 @@
 #include <fcntl.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
 
 #include "../include/colours.h"
 
-#define SH_HISTORY "/home/amey/chime/.history"
+#define SH_HISTORY ".history"
 
 #define MAX_HISTORY 1024
 

@@ -4,7 +4,7 @@ SRCDIR = src
 BUILDDIR = build
 SOURCES = $(wildcard $(SRCDIR)/*.c)
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES))
-TARGET = $(BUILDDIR)/app
+TARGET = $(BUILDDIR)/chime
 
 $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS)	-o $@	$^
