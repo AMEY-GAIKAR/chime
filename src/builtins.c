@@ -4,8 +4,8 @@
 #include "../include/colours.h"
 #include "../include/utils.h"
 
-int sh_cd(char** args) {
-  
+int sh_cd(char **args) {
+
   if (args[1] == NULL) {
     printf(RED "no argument passed\n" COLOR_RESET);
   } else {
@@ -17,10 +17,10 @@ int sh_cd(char** args) {
   return 1;
 }
 
-int sh_echo(char** args) {
-  
+int sh_echo(char **args) {
+
   int c = 1;
-  
+
   while (args[c] != NULL) {
     printf("%s ", args[c]);
     c++;
@@ -31,28 +31,26 @@ int sh_echo(char** args) {
   return 1;
 }
 
-int sh_exit() {
-  return 0;
-} 
+int sh_exit() { return 0; }
 
 int sh_time() {
   GetTime();
   return 1;
 }
 
-int sh_getenv(char** args) {
+int sh_getenv(char **args) {
 
   if (args[1] == NULL) {
     printf(RED "No argument passed.\n" COLOR_RESET);
   } else {
-    GetEnvValue(args[1]);  
+    GetEnvValue(args[1]);
   }
 
   return 1;
 }
 
-int sh_setenv(char** args) {
-  
+int sh_setenv(char **args) {
+
   if (args[1] == NULL) {
     printf(RED "No arguments passed.\n" COLOR_RESET);
   } else if (args[2] == NULL) {
@@ -64,7 +62,7 @@ int sh_setenv(char** args) {
   return 1;
 }
 
-int sh_unsetenv(char** args) {
+int sh_unsetenv(char **args) {
 
   if (args[1] == NULL) {
     printf(RED "No argument passed.\n" COLOR_RESET);
@@ -80,28 +78,14 @@ int sh_history() {
   return 1;
 }
 
-char* builtin[] = {
-  "sh_cd",
-  "sh_exit",
-  "sh_echo",
-  "sh_time",
-  "sh_getenv",
-  "sh_setenv",
-  "sh_unsetenv",
-  "sh_history",
+char *builtin[] = {
+    "sh_cd",     "sh_exit",   "sh_echo",     "sh_time",
+    "sh_getenv", "sh_setenv", "sh_unsetenv", "sh_history",
 };
 
-int (*builtinFunc[]) (char**) = {
-  &sh_cd,
-  &sh_exit,
-  &sh_echo,
-  &sh_time,
-  &sh_getenv,
-  &sh_setenv,
-  &sh_unsetenv,
-  &sh_history,
+int (*builtinFunc[])(char **) = {
+    &sh_cd,     &sh_exit,   &sh_echo,     &sh_time,
+    &sh_getenv, &sh_setenv, &sh_unsetenv, &sh_history,
 };
 
-int NumBuiltins() {
-  return sizeof(builtin) / sizeof(char*);
-}
+int NumBuiltins() { return sizeof(builtin) / sizeof(char *); }

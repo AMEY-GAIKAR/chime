@@ -13,9 +13,9 @@
 #include "../include/colours.h"
 #include "../include/utils.h"
 
-char* ReadLine();
-char** SplitLine(char* line);
-int Execute(char** args);
+char *ReadLine();
+char **SplitLine(char *line);
+int Execute(char **args);
 void MainLoop();
 
 #endif // !APP_H

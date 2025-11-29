@@ -11,11 +11,11 @@
 
 void GetTime();
 
-void GetEnvValue(const char* var);
-void SetEnvValue(const char* var, const char* value);
-void UnsetEnvValue(const char* var);
+void GetEnvValue(const char *var);
+void SetEnvValue(const char *var, const char *value);
+void UnsetEnvValue(const char *var);
 
-void AddToHistory(char* command);
+void AddToHistory(char *command);
 void PrintHistory();
 
 #endif // !UTILS_H

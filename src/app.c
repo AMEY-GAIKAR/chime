@@ -12,11 +12,11 @@
 
 #define TOKEN_SEP " \t\n\r"
 
-char* ReadLine() {
+char *ReadLine() {
 
   int buffersize = 1024;
   int position = 0;
-  char* buffer = (char*) malloc(sizeof(char) * buffersize);
+  char *buffer = (char *)malloc(sizeof(char) * buffersize);
   int c;
 
   if (!buffer) {
@@ -34,7 +34,7 @@ char* ReadLine() {
     } else {
       buffer[position] = c;
     }
-    
+
     position++;
 
     if (position >= buffersize) {
@@ -46,17 +46,16 @@ char* ReadLine() {
       printf("Allocation error\n");
       exit(EXIT_FAILURE);
     }
-  
   }
 }
 
-char** SplitLine(char* line) {
+char **SplitLine(char *line) {
 
   int buffersize = 64;
   int position = 0;
-  char** tokens = malloc(sizeof(char*) * buffersize);
-  char* token;
- 
+  char **tokens = malloc(sizeof(char *) * buffersize);
+  char *token;
+
   if (!tokens) {
     printf("Allocation error\n");
   }
@@ -71,22 +70,22 @@ char** SplitLine(char* line) {
     if (position >= buffersize) {
       buffersize += 1024;
 
-      tokens = realloc(tokens, sizeof(char*) * buffersize);
-      
+      tokens = realloc(tokens, sizeof(char *) * buffersize);
+
       if (!tokens) {
         printf("Allocation error\n");
       }
     }
-    
+
     token = strtok(NULL, TOKEN_SEP);
   }
 
   tokens[position] = NULL;
-  
+
   return tokens;
 }
 
-int Execute(char** args) {
+int Execute(char **args) {
 
   if (args[0] == NULL) {
     return 1;
@@ -100,7 +99,7 @@ int Execute(char** args) {
 
   pid_t cpid;
   int status;
-  
+
   if (strcmp(args[0], "exit") == 0) {
     exit(0);
   }
@@ -123,29 +122,29 @@ int Execute(char** args) {
 
 void MainLoop() {
 
-  char* line;
-  char** args;
+  char *line;
+  char **args;
   int status = 1;
 
   do {
-  
+
     printf(BLU "%s " COLOR_RESET, getlogin());
     char pwd[1024];
     if (getcwd(pwd, sizeof(pwd)) != NULL) {
       printf(CYN "%s\n" COLOR_RESET, pwd);
-    } 
+    }
 
     printf(BMAG "> " COLOR_RESET);
 
-    line = ReadLine(); 
+    line = ReadLine();
     args = SplitLine(line);
 
     AddToHistory(line);
 
     status = Execute(args);
-    
+
     free(line);
     free(args);
-  
-  } while(status);
+
+  } while (status);
 }
